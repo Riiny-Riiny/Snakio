@@ -27,7 +27,7 @@ class GameScene: SKScene {
     override func didMove(to view: SKView) {
         //2
         initializeMenu()
-        game = GameManager()
+        game = GameManager(scene: self)
         //2
         initializeGameView()
         
@@ -51,7 +51,7 @@ class GameScene: SKScene {
         gameBG.isHidden = true
         self.addChild(gameBG)
         //6
-        createGameBoard(width: width, height: height)
+        createGameBoard(width: Int(width) , height: Int(height))
         
     }
     
@@ -62,13 +62,48 @@ class GameScene: SKScene {
         let numCols = 20
         var x = CGFloat(width / -2) + (cellWidth / 2)
         var y = CGFloat(height / 2) - (cellWidth / 2)
+        //loop through rows and columns, create cells
+        
         
         
         for i in 0...numRows - 1 {
+            for j in 0...numCols - 1 {
             let cellNode = SKShapeNode(rectOf: CGSize(width: cellWidth, height: cellWidth))
+                cellNode.strokeColor = SKColor.black
+                cellNode.zPosition = 2
+                cellNode.position = CGPoint(x: x, y: y)
+                gameArray.append((node: cellNode, x: i, y: j))
+                gameBG.addChild(cellNode)
+                x += cellWidth
+         }
+            x = CGFloat(width / -2) + (cellWidth / 2)
+            y -= cellWidth
         }
-        
     }
+    private func startGame() {
+        print("start game")
+        //1
+        gameLogo.run(SKAction.move(by: CGVector(dx: -50, dy: 600), duration: 0.5)) {
+            self.gameLogo.isHidden = true
+        }
+        //2
+        playButton.run(SKAction.scale(to: 0, duration: 0.3)) {
+            self.playButton.isHidden = true
+        }
+        //3
+        let bottomCorner = CGPoint(x: 0, y: (frame.size.height / -2) + 20 )
+        bestScore.run(SKAction.move(to: bottomCorner, duration: 0.4)) {
+            self.gameBG.setScale(0)
+            self.currentScore.setScale(0)
+            self.gameBG.isHidden = false
+            self.currentScore.isHidden = false
+            self.gameBG.run(SKAction.scale(to: 1, duration: 0.4))
+            self.currentScore.run(SKAction.scale(to: 1, duration: 0.4))
+            //new code
+            self.game.initGame()
+        }
+    }
+    
     override func update(_ currentTime: TimeInterval) {
         //called before each frame is rendered
     }
@@ -84,20 +119,6 @@ class GameScene: SKScene {
             }
             
         }
-    }
-    private func startGame() {
-        print("start game")
-        //1
-        gameLogo.run(SKAction.move(by: CGVector(dx: -50, dy: 600), duration: 0.5)) {
-            self.gameLogo.isHidden = true
-        }
-        //2
-        playButton.run(SKAction.scale(to: 0, duration: 0.3)) {
-            self.playButton.isHidden = true
-        }
-        //3
-        let bottomCorner = CGPoint(x: 0, y: (frame.size.height / -2) + 20 )
-        bestScore.run(SKAction.move(to: bottomCorner, duration: 0.4))
     }
     private func initializeMenu() {
         //4
