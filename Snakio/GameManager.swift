@@ -10,6 +10,11 @@ import SpriteKit
 
 class GameManager {
     var scene: GameScene
+    var nextTime: Double?
+    
+    var timeExtension: Double = 0.15
+    var playerDirecion: Int = 4
+    
     init(scene: GameScene) {
         self.scene = scene
     }
@@ -22,7 +27,17 @@ class GameManager {
         renderChange()
     }
     //2
-    
+    func update(time: Double) {
+        if nextTime == nil {
+            nextTime = time + timeExtension
+        } else {
+            if time >= nextTime! {
+                nextTime = time + timeExtension
+                
+            }
+            
+        }
+    }
     func renderChange() {
         for (node, x, y) in scene.gameArray {
             if contains(a: scene.playerPositions, v: (x,y)){
@@ -34,6 +49,63 @@ class GameManager {
         }
     }
     //3
+    private func updatePlayerPosition() {
+        var xChange = -1
+        var yChange = 0
+        switch playerDirecion {
+            
+        case 1:
+            //left
+            xChange = -1
+            yChange = 0
+            break
+            
+        case 2:
+            //up
+            xChange = 0
+            yChange = -1
+            break
+            
+        case 3:
+            //right
+            xChange = 1
+            yChange = 0
+        case 4:
+            //down
+            xChange = 0
+            yChange = 1
+            break
+            
+        default:
+            break
+        }
+        if scene.playerPositions.count > 0 {
+            var start = scene.playerPositions.count - 1
+            while start > 0 {
+                scene.playerPositions[start] = scene.playerPositions[start - 1]
+                start -= 1
+            }
+            scene.playerPositions[0] = (scene.playerPositions[0].0 + yChange, scene.playerPositions[0].1 + xChange)
+        }
+        if scene.playerPositions.count > 0 {
+            let x = scene.playerPositions[0].1
+             let y = scene.playerPositions[0].0
+            if y > 40 {
+                scene.playerPositions[0].0 = 0
+            } else if y < 0 {
+                scene.playerPositions[0].0 = 40
+                
+            } else if x > 20 {
+                scene.playerPositions[0].1 = 0
+                
+                
+            } else if x < 0 {
+                scene.playerPositions[0].1 = 20
+            }
+            
+        }
+        renderChange()
+    }
     func contains(a: [(Int, Int)], v:(Int,Int))-> Bool {
         let (c1, c2) = v
         for (v1, v2) in a { if v1 == c1 && v2 == c2 { return true } }

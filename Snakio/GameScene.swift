@@ -30,8 +30,35 @@ class GameScene: SKScene {
         game = GameManager(scene: self)
         //2
         initializeGameView()
+        let swipeRight: UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(swipeR))
+        swipeRight.direction = .right
+        view.addGestureRecognizer(swipeRight)
+        
+        let swipeLeft: UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(swipeL))
+        swipeRight.direction = .left
+        view.addGestureRecognizer(swipeLeft)
+        
+        let swipeUp: UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(swipeU))
+        swipeRight.direction = .up
+        view.addGestureRecognizer(swipeUp)
+        
+        let swipeDown: UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(swipeD))
+        swipeRight.direction = .down
+        view.addGestureRecognizer(swipeDown)
         
         }
+    @objc func swipeR() {
+        print("r")
+    }
+    @objc func swipeL() {
+        print("l")
+    }
+    @objc func swipeU() {
+        print("u")
+    }
+    @objc func swipeD() {
+        print("d")
+    }
     private func initializeGameView() {
         currentScore = SKLabelNode(fontNamed: "AerialRoundedMTBold")
          currentScore.zPosition = 1
@@ -106,6 +133,8 @@ class GameScene: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
         //called before each frame is rendered
+        //1
+        game.update(time: currentTime)
     }
     //3
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
