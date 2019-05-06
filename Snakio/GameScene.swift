@@ -47,18 +47,25 @@ class GameScene: SKScene {
         view.addGestureRecognizer(swipeDown)
         
         }
+    
+    
     @objc func swipeR() {
-        print("r")
+        game.swipe(ID: 3)
     }
+    
     @objc func swipeL() {
-        print("l")
+       game.swipe(ID: 1)
     }
+    
     @objc func swipeU() {
-        print("u")
+        game.swipe(ID: 2)
     }
+    
     @objc func swipeD() {
-        print("d")
+      game.swipe(ID: 4)
     }
+    
+   
     private func initializeGameView() {
         currentScore = SKLabelNode(fontNamed: "AerialRoundedMTBold")
          currentScore.zPosition = 1

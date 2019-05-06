@@ -13,7 +13,7 @@ class GameManager {
     var nextTime: Double?
     
     var timeExtension: Double = 0.15
-    var playerDirecion: Int = 4
+    var playerDirection: Int = 4
     
     init(scene: GameScene) {
         self.scene = scene
@@ -34,6 +34,8 @@ class GameManager {
             if time >= nextTime! {
                 nextTime = time + timeExtension
                 
+                updatePlayerPosition()
+                
             }
             
         }
@@ -52,7 +54,7 @@ class GameManager {
     private func updatePlayerPosition() {
         var xChange = -1
         var yChange = 0
-        switch playerDirecion {
+        switch playerDirection {
             
         case 1:
             //left
@@ -106,6 +108,15 @@ class GameManager {
         }
         renderChange()
     }
+    
+    func swipe(ID: Int) {
+        if !(ID == 2 && playerDirection == 4) && !(ID == 4 && playerDirection == 2) {
+            if !(ID == 1 && playerDirection == 3) && !(ID == 3 && playerDirection == 1) {
+                playerDirection = ID
+            }
+        }
+    }
+    
     func contains(a: [(Int, Int)], v:(Int,Int))-> Bool {
         let (c1, c2) = v
         for (v1, v2) in a { if v1 == c1 && v2 == c2 { return true } }
